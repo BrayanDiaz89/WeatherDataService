@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-public class WeatherService {
+public class GetDataWeatherService {
 
     @Autowired
     private WebClient webClient;
@@ -20,8 +20,8 @@ public class WeatherService {
 
     @Value("${API_KEY}")
     private String apiKey;
-    
-    public Mono<WeatherResponseDTO> getWeatherByCityAndLang(RequestDTO request){
+
+    public Mono<WeatherResponseDTO> getDataFromOpenWeather(RequestDTO request){
        return webClient.openWeatherWebClient().get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/weather")
