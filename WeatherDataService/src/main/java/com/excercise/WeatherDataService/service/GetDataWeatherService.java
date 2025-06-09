@@ -35,10 +35,7 @@ public class GetDataWeatherService {
                             .build())
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError, response ->
-                            response.bodyToMono(String.class)
-                                    .flatMap(errorBody -> Mono.error(new ApplicationException(
-                                            "Ciudad no encontrada o parámetros inválidos: " + errorBody
-                                    )))
+                            Mono.error(new ApplicationException("Ciudad o Lenguaje no encontrado. Parámetros inválidos."))
                     )
                     .onStatus(HttpStatusCode::is5xxServerError, response ->
                             Mono.error(new ApplicationException("Error del servidor. Intenta más tarde."))
