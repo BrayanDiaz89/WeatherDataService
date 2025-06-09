@@ -1,9 +1,9 @@
 package com.excercise.WeatherDataService.service;
 
 import com.excercise.WeatherDataService.config.WebClient;
+import com.excercise.WeatherDataService.model.apiDTO.OpenWeatherApiResponse;
 import com.excercise.WeatherDataService.model.apiDTO.RequestDTO;
 import com.excercise.WeatherDataService.model.apiDTO.WeatherResponseDTO;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,21 +31,15 @@ public class GetDataWeatherService {
                         .queryParam("lang", request.lang())
                         .build())
                 .retrieve()
-                .bodyToMono(String.class)
-               .map(json -> {
+                .bodyToMono(OpenWeatherApiResponse.class)
+               .map(apiResponse -> {
                    try{
-                       JsonNode root = objectMapper.readTree(json);
-                       String cityName = root.path("name").asText();
-                       String description = root.path("weather").get(2).path("description").asText();
-                       Double temperature = root.path("main").path("temp").asDouble();
-                       Integer humidity = root.path("main").path("humidity").asInt();
-                       Double windSpeed = root.path("wind").path("speed").asDouble();
-                       return new WeatherResponseDTO(
-                               cityName,
-                               description,
-                               temperature,
-                               humidity,
-                               windSpeed
+                      return new WeatherResponseDTO(
+                               apiResponse.name(),
+                               apiResponse.weather().get(0).description(),
+                               apiResponse.main().temp(),
+                               apiResponse.main().humidity(),
+                               apiResponse.wind().speed()
                        );
                    } catch (Exception e){
                        throw new RuntimeException("Error parsing JSON: " + e.getMessage());
