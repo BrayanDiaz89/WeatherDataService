@@ -16,7 +16,7 @@ Este proyecto es una aplicación **Java + Spring Boot + WebFlux** que consume la
 
 ## 📥 Ejemplo de Uso:
 
-### 🛠️ Petición de entrada (`RequestDTO`)
+### 🛠️ Petición de entrada con método POST (`RequestDTO`)
 
 ```json
 {
